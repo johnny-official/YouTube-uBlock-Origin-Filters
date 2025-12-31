@@ -28,7 +28,7 @@ youtube.com##ytd-rich-section-renderer
 ! Make video thumbnails smaller. I'm not blind; I want more than approximately 6* videos (on my 15-inch laptop) to be shown at once.
 ! Adapted from CustomTube: https://github.com/lightbeam24/CustomTube/blob/f5760697c0f1c9413350dc97da5b52b88dea25f/firefox/css/rich-grid.css
 ! Change the value of "--ytd-rich-grid-items-per-row" to change the thumbnail size (and number of thumbnails visible at once)
-youtube.com##ytd-rich-grid-renderer:style(--ytd-rich-grid-items-per-row: 5 !important; --ytd-rich-grid-item-margin: 12px !important;)
+youtube.com##ytd-rich-grid-renderer:style(--ytd-rich-grid-items-per-row: 4 !important; --ytd-rich-grid-item-margin: 12px !important;)
 youtube.com###contents > ytd-rich-grid-row:style(display: contents !important;)
 youtube.com###contents > ytd-rich-grid-row > #contents:style(display: contents !important;)
 youtube.com##ytd-rich-item-renderer:style(margin-bottom: 12px !important)
