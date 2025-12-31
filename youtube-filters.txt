@@ -1,0 +1,280 @@
+[Adblock Plus 2.0]
+! Title: YouTube custom filters
+! Description: A collection of rules which use to make YouTube not suck.
+
+! Version: 2025.12.31
+
+
+! ========= YouTube ==========
+! ---------- TOPBAR ----------
+! Disable animated youtube logos (aka "yoodles") that appear on special occasions.
+youtube.com##ytd-yoodle-renderer > picture
+youtube.com##ytd-yoodle-renderer > ytd-logo:remove-attr(hidden)
+! Remove the voice search button.
+youtube.com###voice-search-button
+! Remove the "Create" button.
+youtube.com##:is(ytd-button-renderer, ytd-topbar-menu-button-renderer):has(button[aria-label="Create"])
+! Remove frosted glass everywhere.
+! NO BACKGROUND BLUR IN MY WEB BROWSERS.
+youtube.com###frosted-glass
+youtube.com##:is(ytd-masthead, ytd-feed-filter-chip-bar-renderer):remove-attr(frosted-glass-mode)
+! ----------- HOME -----------
+! Remove skeleton UI while page is still loading or scrolling down.
+! (The homepage grid fix breaks these when scrolling down)
+youtube.com###home-page-skeleton
+youtube.com###ghost-cards
+! Remove basically everything that isn't a video from the homepage (and probably other places):
+youtube.com##ytd-rich-section-renderer
+! Make video thumbnails smaller. I'm not blind; I want more than approximately 6* videos (on my 15-inch laptop) to be shown at once.
+! Adapted from CustomTube: https://github.com/lightbeam24/CustomTube/blob/f5760697c0f1c9413350dc97da5b52b88dea25f/firefox/css/rich-grid.css
+! Change the value of "--ytd-rich-grid-items-per-row" to change the thumbnail size (and number of thumbnails visible at once)
+youtube.com##ytd-rich-grid-renderer:style(--ytd-rich-grid-items-per-row: 5 !important; --ytd-rich-grid-item-margin: 12px !important;)
+youtube.com###contents > ytd-rich-grid-row:style(display: contents !important;)
+youtube.com###contents > ytd-rich-grid-row > #contents:style(display: contents !important;)
+youtube.com##ytd-rich-item-renderer:style(margin-bottom: 12px !important)
+youtube.com##ytd-rich-grid-renderer .ghost-grid.ytd-ghost-grid-renderer:style(margin: 0 !important;)
+! Fix gaps in video thumbnails due to removed ads, etc.
+youtube.com##ytd-rich-item-renderer:remove-attr(is-in-first-column)
+! Remove channel icon and resize video title font (similar to an older YouTube UI)
+! YouTube. WHY THE FUCK DO YOU NEED TO CHANGE THE FUCKING CLASS NAME TO
+! REMOVE "wiz" FOR ANY OTHER REASON THAN TO PISS OFF ADBLOCK USERSS???????????????????????????????
+youtube.com##div:is(.yt-lockup-metadata-view-model__avatar,.yt-lockup-metadata-view-model-wiz__avatar)
+youtube.com##a:is(.yt-lockup-metadata-view-model__title,.yt-lockup-metadata-view-model-wiz__title):style(font-size:11pt !important; line-height:1.2 !important;)
+youtube.com##span:is(.yt-content-metadata-view-model__metadata-text,.yt-content-metadata-view-model-wiz__metadata-text):style(font-size:10pt !important; line-height:1.2 !important;)
+! Older version of the above.
+! Keep enabled for now; part of an A/B test.
+youtube.com###avatar-container
+youtube.com###video-title:style(font-size:11pt !important; line-height:1.2 !important;)
+youtube.com###metadata .ytd-video-meta-block:style(font-size:10pt !important; line-height:1.2 !important;)
+! Remove "Looking for something different?" popup that appears sometimes amongst video recommendations.
+youtube.com##ytd-rich-item-renderer:has(#content ytd-feed-nudge-renderer)
+! Remove "Auto-dubbed" suggestions from home page and video suggestions.
+youtube.com##:is(yt-lockup-view-model:is(.ytd-item-section-renderer, .ytd-watch-next-secondary-results-renderer), ytd-rich-item-renderer):has(div:is(.yt-badge-shape__text,.badge-shape-wiz__text):has-text("Auto-dubbed"))
+! Older version of the above, because consistency doesn't exist at YT.
+!youtube.com##ytd-rich-item-renderer:has(ytd-badge-supported-renderer div[aria-label="Auto-dubbed"])
+! Also remove "Mix" playlists from home page.
+youtube.com##ytd-rich-item-renderer:has(div.badge-shape-wiz__text:has-text("Mix"))
+! Remove surveys from homepage, and possibly more places.
+! TODO: test if this still works after ANOTHER UI update made to piss off adblock users.
+youtube.com##lockup-attachments-view-model:has(yt-slimline-survey-model)
+
+! --------- CHANNELS ---------
+! Remove the "For you", "Shorts", and "Members-only videos" sections from channel home page.
+! I have no interest in Shorts, and will support channels by other means if I so desire.
+! TODO: remove from the grid that appears at the end of a video.
+youtube.com##ytd-item-section-renderer:has(#title:has-text("For you"))
+youtube.com##ytd-reel-shelf-renderer:has(#title:has-text("Shorts"))
+youtube.com##ytd-item-section-renderer:has(a.ytd-shelf-renderer[title="Members-only videos"])
+youtube.com##ytd-rich-item-renderer:has(ytd-badge-supported-renderer div.badge-style-type-members-only)
+youtube.com##ytd-rich-item-renderer:has(ytd-badge-supported-renderer div.yt-badge-shape__text:has-text("Members only"))
+
+! ---------- SEARCH ----------
+! Make individual search suggestions not take up like 10% of the screen height.
+youtube.com##.ytSuggestionComponentSuggestion:style(height: 36px !important;)
+! Make video thumbnails smaller in search results
+! (yes, the 1.2% less width for one of the rules is important)
+youtube.com##ytd-two-column-search-results-renderer ytd-thumbnail:style(min-width: 260px !important; width:50% !important; max-width: 320px !important;)
+youtube.com##ytd-two-column-search-results-renderer a:is(.yt-lockup-view-model-wiz__content-image,.yt-lockup-view-model__content-image):style(min-width: 260px !important; width:48.8% !important; max-width: 320px !important;)
+! Fix channel info in video search results.
+youtube.com###channel-info:style(padding: 4px 0 !important;)
+youtube.com###channel-thumbnail
+! Hide video chapters thing from search results.
+! TODO: test if other types of "expandable metadata" are hidden by this rule.
+youtube.com###expandable-metadata
+
+! ------ WATCH (player) ------
+! Remove the "Contains paid promotion" popup on sponsored videos.
+! SponsorBlock gets rid of said paid promotions anyways.
+youtube.com##.ytp-paid-content-overlay-link
+! Hide channel logo/branding in the bottom-right corner of the video.
+youtube.com##.iv-branding
+! Remove background from time display.
+youtube.com##.ytp-time-display span.ytp-time-wrapper:remove-class(ytp-time-wrapper)
+! Remove pink gradient from progress bars (main player + partially watched video suggestions).
+youtube.com##:is(.ytp-play-progress, #progress, .ytThumbnailOverlayProgressBarHostWatchedProgressBarSegment):style(background:#f03 !important;)
+! Remove the 1080p "premium" option from the quality selector.
+! Funnily enough, forcing H.264 playback at 1080p has better (in my opinion) quality than
+! VP9/AV1 "standard" 1080p while being less resource intensive, especially on older computers.
+! NOTE: this option doesn't show up if H.264 encoding is forced,
+! either via about:config flags or an extension (e.g. h264ify)
+youtube.com##.ytp-menuitem:has(*:has-text("1080p Premium"))
+! Remove featured product ads from in video.
+youtube.com##.ytp-featured-product
+! Remove the "Experiencing interruptions?" popup, added during a recent anti-adblock update.
+youtube.com##tp-yt-paper-toast:has(yt-formatted-string:has-text("interruptions?"))
+! Remove the heatmap from the progress bar.
+! I never really used this, and with the 2025 player UI update, it's kind of just bad to look at in my opinion, to be honest.
+youtube.com##.ytp-heat-map-container
+
+! --- WATCH (description) ---
+! Disable animated view counts (source: https://reddit.com/r/uBlockOrigin/comments/17h0ija)
+! Note that you will have to refresh the page to get updated view/like counts.
+! TODO: remove just the animation but keep the live updating?
+*youtube.com/youtubei/v1/updated_metadata*
+! Hide "Members-first" text next to view count.
+! I could not care less if a few people get access to a video slightly earlier.
+youtube.com###info :is(span, a):has-text(Members first)
+! Hide the "x products" text as well.
+youtube.com###info span:has-text(product)
+! Remove the "Join", "Thanks", "Clip", and "Shop" buttons (including from the overflow menu).
+youtube.com###sponsor-button
+youtube.com##yt-button-view-model:has(:is(button[aria-label="Thanks"], button[aria-label="Clip"], button[aria-label="Shop"]))
+youtube.com##tp-yt-paper-item:has(ytd-menu-service-item-renderer yt-formatted-string:has-text("Thanks"))
+youtube.com##tp-yt-paper-item:has(ytd-menu-service-item-renderer yt-formatted-string:has-text("Clip"))
+youtube.com##tp-yt-paper-item:has(ytd-menu-service-item-renderer yt-formatted-string:has-text("Shop"))
+! Remove the "clarification" popups on certain videos (news outlets, covid videos etc.).
+youtube.com###clarify-box
+youtube.com###middle-row ytd-info-panel-content-renderer
+! Remove video description clutter (shorts, transcript, etc.), but leave links to other videos (from the 'i' button) untouched.
+! It would've been so easy to use just one line to nuke everything all at once,
+! but of course YT makes everything hard (including watching their own videos sometimes).
+youtube.com###structured-description :is(ytd-horizontal-card-list-renderer, yt-video-attributes-section-view-model)
+youtube.com##ytd-video-description-transcript-section-renderer
+youtube.com##ytd-video-description-course-section-renderer
+youtube.com##ytd-video-description-infocards-section-renderer:style(border:0 !important)
+youtube.com##ytd-video-description-infocards-section-renderer :is(#header, #action-buttons, #social-links)
+! Fix margins/padding from above changes.
+youtube.com##:is(ytd-structured-description-content-renderer, tp-yt-paper-button#collapse):style(margin: 0 !important;)
+youtube.com##ytd-video-description-infocards-section-renderer:style(padding: 0 !important;)
+youtube.com##ytd-video-description-infocards-section-renderer ytd-compact-infocard-renderer:first-of-type:style(margin-top: 16px !important;)
+! Remove remnants of merch store.
+! This seems to already be removed by an actual blocklist, but some padding was left over.
+! TODO: test if this is still needed or has been merged into a proper blocklist.
+youtube.com##ytd-merch-shelf-renderer
+! Remove the AI summary shit.
+! I have a brain, and can read the video description.
+youtube.com###expandable-metadata:has(video-summary-content-view-model)
+! Disable description colouring on hover.
+! How is it possible for the interns at YouTube to need JavaScript(?) to re-colour text on hover???
+! There is a ":hover" CSS selector JUST FOR THIS PURPOSE!!!!!!!
+youtube.com##ytd-watch-metadata:remove-attr(enable-color-sampling)
+youtube.com###description span.yt-core-attributed-string--link-inherit-color:style(color: var(--yt-spec-text-primary) !important;)
+youtube.com###description span.yt-core-attributed-string--highlight-text-decorator:style(background-color: var(--yt-spec-additive-background) !important;)
+youtube.com###description :not(span.yt-core-attributed-string--highlight-text-decorator) > a.yt-core-attributed-string__link--call-to-action-color:style(color: var(--yt-spec-call-to-action) !important;)
+
+! --- WATCH (related-vids) ---
+! Hide the "Chapters" popup when clicking in a certain spot on the video player
+youtube.com##ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-macro-markers-description-chapters"]
+! Hide Youtube movie offers ("Watch on YouTube").
+! There are better platforms to watch paid movies/TV on.
+youtube.com###offer-module
+! Hide members-only videos in recommendations.
+! Again, if I want to see exclusive content, I will do it through another service (i.e. Floatplane, Patreon, Ko-fi, etc).
+youtube.com##:is(ytd-compact-video-renderer, yt-lockup-view-model):has(yt-badge-view-model div.badge-shape-wiz__text:has-text("Members only"))
+! Older version of the above. YT must be updating their UI...
+youtube.com##yt-lockup-view-model:has(.badge-style-type-members-only)
+! Hide the "New" badge on recommended videos.
+! Wow, these badges STILL cause ugly gaps between the thumbnails! (as of updating this rule)
+! It's almost as if YT doesn't give a fu-
+youtube.com##div.yt-content-metadata-view-model-wiz__badge:has(div.badge-shape-wiz__text:has-text("New"))
+! Older version of the above, because, again, consistency is non-existant on YouTube.
+!youtube.com##ytd-badge-supported-renderer:has(.badge[aria-label="New"])
+! Hide channel recommendations.
+youtube.com##ytd-item-section-renderer ytd-channel-renderer
+
+! ----- WATCH (comments) -----
+! Remove skeleton UI from comments section
+youtube.com###comments #spinner-container
+! Make the uploader's name in comments less annoyingly coloured
+youtube.com##ytd-author-comment-badge-renderer[creator]:style(background-color: rgba(136, 136, 136, 0.4) !important)
+youtube.com##ytd-author-comment-badge-renderer[creator] #text:style(color: white !important; font-weight:500 !important)
+youtube.com##ytd-author-comment-badge-renderer[creator] #icon .yt-icon-shape:style(color: white !important)
+! Hide "Translate to English" button (it seems to pop up on many english comments for some reason).
+youtube.com##.ytd-comment-view-model.translate-button
+! Hide the "Top is selected, so you'll see featured comments" text
+youtube.com##yt-comment-filter-context-view-model
+
+! --------- PLAYLISTS --------
+! Hide recommended playlists/videos when viewing playlists.
+youtube.com##ytd-item-section-renderer[is-playlist-video-container]
+youtube.com##ytd-shelf-renderer:has(#title:has-text("Recommended"))
+
+! ----------- MISC -----------
+! Unround video thumbnails. More of a minor nitpick, but I prefer unrounded.
+! Some of these rules were adapted from CustomTube as well (see the grid view fix above)
+! TODO: test how many of these elements are actually required to unround thumbnails
+youtube.com##:is(#thumbnail, #playlist-thumbnail, yt-collections-stack div, .collections-stack-wiz div, yt-thumbnail-view-model, .image-wrapper, .ytp-videowall-still-image, yt-thumbnail-view-model, yt-image-banner-view-model):style(border-radius: 0 !important;)
+! This needs to be a separate rule for some reason...
+youtube.com##ytd-thumbnail::before:style(border-radius: 0 !important;)
+! Remove tooltips when hovering over certain text.
+! You know there's a built-in browser/OS function for that, right? RIGHT??
+youtube.com##tp-yt-paper-tooltip
+! Remove (some?) surveys that pop up occasionally.
+! TODO: test if proper adblock list removes these already
+youtube.com##tp-yt-paper-dialog :is(ytd-single-option-survey-renderer, ytd-checkbox-survey-renderer)
+! Remove "show live chat" button from taking up 50% of the description space.
+! NOTE: may make live chat inaccessable until page is reloaded.
+! Disabled because the old button to show the live chat seems to have been finally removed.
+!youtube.com###teaser-carousel
+! Hide the video autoplay.
+youtube.com###inline-preview-player
+! Get rid of the "Remove ads" button. To use these rules, you're already removing ads (hopefully...)
+youtube.com##yt-list-item-view-model .yt-list-item-view-model__text-wrapper:has-text("Remove ads")
+! Clean up the player UI.
+youtube.com###movie_player .ytp-seek-overlay
+youtube.com##.ytp-fullscreen-quick-actions
+youtube.com###movie_player .ytp-fullscreen-grid a.ytp-modern-videowall-still
+
+! Sourced from https://www.reddit.com/r/uBlockOrigin/comments/17u64ue
+! Hide the animations when you subscribe or like a video, as well as when a youtuber says to do so.
+! Why must everything be over-engineered to be as stimulating as possible nowadays.
+youtube.com##yt-animated-action > :not(.ytAnimatedActionContentWithBackground)
+youtube.com##yt-animated-action .ytAnimatedActionLottie
+youtube.com##yt-smartimation > :not(.smartimation__content)
+youtube.com##:is(.smartimation__content, .animated-action__content-with-background) > :has(> lottie-component)
+youtube.com##yt-reaction-control-panel-view-model
+youtube.com##yt-reaction-control-panel-overlay-view-model
+
+! Can't remember what (2/3 of) these were for.
+! TODO: test
+youtube.com##.ytwHowThisWasMadeSectionViewModelHost
+youtube.com###attached-survey
+youtube.com###ticket-shelf
+
+! ---- 2025 PLAYER UI FIXES! ----
+! Okay, I'm just going to go ahead and say that I actually *like* some of the UI changes.
+! The icons... not so much, but I can make do with the new set.
+! This rule set aims to fix some of the problems with the new UI in my opinion (including fixes for Enhancer for YouTube's buttons).
+! This may also need to be converted into a userscript if changes become big enough (e.g. the old "play/pause" overlay animation gets removed).
+! Anyways, without further ado...
+
+! Fix player button sizing, with specific rules for Enhancer for YouTube, which broke its button layout after the new UI update.
+youtube.com##.ytp-delhi-modern .ytp-button:not(.ytp-efyt-button, .ytp-large-play-button) svg:style(width: 24px !important; height: 24px !important; padding: 12px !important;)
+youtube.com##.ytp-delhi-modern .ytp-button.ytp-efyt-button:style(height: 48px !important; padding: 0 !important;)
+youtube.com##.ytp-delhi-modern .ytp-button.ytp-efyt-button svg:style(padding: 0 !important;)
+! Bye bye background blur on everything - you won't be missed.
+youtube.com##:root:style(--yt-frosted-glass-backdrop-filter-override: none !important; --yt-spec-static-overlay-background-medium: rgba(28,28,28,.9) !important;)
+! Make popup and context menu backgrounds more opaque, so they are more readable without background blur.
+youtube.com##:root:style(--yt-spec-overlay-background-medium: rgba(0, 0, 0, 0.94) !important)
+! All (most?) of the below rules can be removed by uncommenting the below line (for now), but
+! it'll be quite glitchy (presumably due to YT trying to add back the removed class).
+!youtube.com###movie_player:remove-class(ytp-delhi-modern)
+! Restore the old Play/Pause animation and icon sizing (it still uses the new icons, but it's less bad than before).
+! If the old animation gets removed, the following CSS code will restore it:
+! @keyframes ytp-bezel-fadeout { from { opacity: 1; } to { opacity: 0; transform: scale(2); } }
+youtube.com##.ytp-delhi-modern .ytp-bezel:style(width: 52px !important; height: 52px !important; margin-left: -26px !important; margin-top: -26px !important; animation: ytp-bezel-fadeout .5s linear 1 normal forwards !important;)
+youtube.com##.ytp-delhi-modern .ytp-bezel-icon:style(width: 24px !important; height: 24px !important; margin: 14px !important;)
+! Revert player buttons to use pre-2025 player sizes.
+youtube.com##.ytp-delhi-modern :is(.ytp-button:not(.ytp-large-play-button), .ytp-chrome-bottom, .ytp-chrome-controls, .ytp-right-controls):style(height: 48px !important;)
+youtube.com##.ytp-delhi-modern .ytp-play-button:style(width: 48px !important;)
+youtube.com##.ytp-delhi-modern :is(.ytp-chrome-controls, .ytp-chrome-controls *):style(line-height: 48px !important;)
+youtube.com##.ytp-delhi-modern :is(.ytp-button:not(.ytp-large-play-button), .ytp-volume-area, .ytp-right-controls):style(background:#0000 !important; margin: 0 !important;)
+youtube.com##.ytp-delhi-modern .ytp-chapter-title-prefix:style(display: unset !important; padding: 0 5px !important;)
+youtube.com##.ytp-delhi-modern :is(.ytp-chapter-container, .ytp-button.ytp-chapter-title, .ytp-time-display):style(padding: 0 !important;)
+youtube.com##.ytp-delhi-modern .ytp-progress-bar-container:style(bottom: 48px !important;)
+! Remove new button backgrounds and restore the bottom gradient
+youtube.com##.ytp-delhi-modern :is(button, span)::before
+youtube.com##.ytp-delhi-modern :is(button, span)::after
+youtube.com##.ytp-delhi-modern .ytp-gradient-bottom:style(display: unset !important;)
+youtube.com##.ytp-delhi-modern .ytp-time-wrapper:not(.ytp-miniplayer-ui *)::after
+youtube.com##.ytp-delhi-modern .ytp-time-wrapper:style(background:#0000 !important; padding: 0 !important;)
+! Fix too large menu buttons with new UI
+youtube.com##.ytp-delhi-modern .ytp-panel-menu:style(padding:8px 0 !important;)
+youtube.com##.ytp-delhi-modern .ytp-menuitem:style(height: 40px !important;)
+! Fix progress tooltip pill being way too big, but keep it
+! (this is one of the changes I like - it makes the timestamp easier to read)
+youtube.com##.ytp-delhi-modern .ytp-tooltip-progress-bar-pill:style(padding: 4px 6px !important; border-radius: 6px !important;)
+! Fix back button on menus being duplicated.
+! This seems to be a potential bug that's existed since before the new UI?
+! I couldn't find any changed styles for the "modern" player, so this rule will be kept for all player versions.
+youtube.com##.ytp-panel-back-button:style(background-position: center !important; background-repeat: no-repeat !important;)
