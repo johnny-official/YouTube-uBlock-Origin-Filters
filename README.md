@@ -33,7 +33,7 @@ This filter list was originally hosted as a GitHub Gist. Since then, it has gain
     - If you're on Chrome (or another Chromium-based browser, e.g. Edge), install [LibreWolf](https://librewolf.net/installation/) or [Firefox](https://www.firefox.com/), then install uBlock Origin using the link above.
     - These filters haven't been tested on [uBlock Origin Lite](https://github.com/uBlockOrigin/uBOL-home) (does it even support these custom filters?)
 2.  Open uBO's settings (click on the extension icon, then the "gears" icon), and go to the "Filter lists" tab.
-3.  Expand the "Import..." section, and paste [this link](https://codeberg.org/Sparronator9999/yt-ublock-filters/raw/branch/main/yt-filters.txt) into the box that appears.
+3.  Expand the "Import..." section, and paste [this link](https://raw.githubusercontent.com/johnny-official/YouTube-uBlock-Origin-Filters/refs/heads/main/youtube-filters.txt) into the box that appears.
 4.  Click "Apply changes" and wait for the filter list to update.
 5.  ???
 6.  Profit!
