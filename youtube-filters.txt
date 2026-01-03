@@ -1,12 +1,15 @@
-[Adblock Plus 2.0]
+[Adblock Plus 3.0]
 ! Title: YouTube custom filters
 ! Description: A collection of rules which use to make YouTube not suck.
 
 ! Version: 2025.12.31
 
+! =========== YouTube ============
+! ------------ TOPBAR ------------
 
-! ========= YouTube ==========
-! ---------- TOPBAR ----------
+! Block ads premium and ads shopping
+www.youtube.com###shopping-timely-shelf
+www.youtube.com###masthead-ad
 ! Disable animated youtube logos (aka "yoodles") that appear on special occasions.
 youtube.com##ytd-yoodle-renderer > picture
 youtube.com##ytd-yoodle-renderer > ytd-logo:remove-attr(hidden)
